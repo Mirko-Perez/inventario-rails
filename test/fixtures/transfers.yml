@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  article: one
+  from_person: one
+  to_person: one
+  transfer_date: 2025-08-25
+  notes: MyText
+
+two:
+  article: two
+  from_person: two
+  to_person: two
+  transfer_date: 2025-08-25
+  notes: MyText

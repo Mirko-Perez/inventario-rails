@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  model: MyString
+  brand: MyString
+  entry_date: 2025-08-25
+  current_person: one
+
+two:
+  model: MyString
+  brand: MyString
+  entry_date: 2025-08-25
+  current_person: two
