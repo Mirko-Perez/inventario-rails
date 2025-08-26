@@ -1,5 +1,5 @@
 class PeopleController < ApplicationController
-  before_action :set_person, only: [:show, :edit, :update, :destroy]
+  before_action :set_person, only: [ :show, :edit, :update, :destroy ]
 
   def index
     @people = Person.includes(:current_articles).order(:first_name, :last_name)
@@ -16,9 +16,8 @@ class PeopleController < ApplicationController
 
   def create
     @person = Person.new(person_params)
-    
     if @person.save
-      redirect_to @person, notice: 'Person was successfully created.'
+      redirect_to @person, notice: "Person was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
@@ -29,7 +28,7 @@ class PeopleController < ApplicationController
 
   def update
     if @person.update(person_params)
-      redirect_to @person, notice: 'Person was successfully updated.'
+      redirect_to @person, notice: "Person was successfully updated."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -37,10 +36,10 @@ class PeopleController < ApplicationController
 
   def destroy
     if @person.current_articles.any?
-      redirect_to @person, alert: 'Cannot delete person who currently carries articles.'
+      redirect_to @person, alert: "Cannot delete person who currently carries articles."
     else
       @person.destroy
-      redirect_to people_url, notice: 'Person was successfully deleted.'
+      redirect_to people_url, notice: "Person was successfully deleted."
     end
   end
 

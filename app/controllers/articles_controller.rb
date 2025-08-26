@@ -1,5 +1,5 @@
 class ArticlesController < ApplicationController
-  before_action :set_article, only: [:show, :edit, :update, :destroy]
+  before_action :set_article, only: [ :show, :edit, :update, :destroy ]
 
   def index
     @articles = Article.includes(:current_person)
@@ -7,7 +7,6 @@ class ArticlesController < ApplicationController
     @articles = @articles.by_model(params[:model]) if params[:model].present?
     @articles = @articles.by_entry_date(params[:entry_date]) if params[:entry_date].present?
     @articles = @articles.order(:brand, :model)
-    
     @brands = Article.distinct.pluck(:brand).compact.sort
   end
 
@@ -22,9 +21,8 @@ class ArticlesController < ApplicationController
 
   def create
     @article = Article.new(article_params)
-    
     if @article.save
-      redirect_to @article, notice: 'Article was successfully created.'
+      redirect_to @article, notice: "Article was successfully created."
     else
       @people = Person.all.order(:first_name, :last_name)
       render :new, status: :unprocessable_entity
@@ -37,7 +35,7 @@ class ArticlesController < ApplicationController
 
   def update
     if @article.update(article_params)
-      redirect_to @article, notice: 'Article was successfully updated.'
+      redirect_to @article, notice: "Article was successfully updated."
     else
       @people = Person.all.order(:first_name, :last_name)
       render :edit, status: :unprocessable_entity
@@ -46,7 +44,7 @@ class ArticlesController < ApplicationController
 
   def destroy
     @article.destroy
-    redirect_to articles_url, notice: 'Article was successfully deleted.'
+    redirect_to articles_url, notice: "Article was successfully deleted."
   end
 
   private
