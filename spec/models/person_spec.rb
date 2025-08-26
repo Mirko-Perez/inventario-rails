@@ -62,7 +62,7 @@ RSpec.describe Person, type: :model do
 
     it 'returns transfers involving the person' do
       transfer = create(:transfer, article: article, from_person: person1, to_person: person2)
-      
+
       expect(person1.transfer_history).to include(transfer)
       expect(person2.transfer_history).to include(transfer)
     end
@@ -70,7 +70,7 @@ RSpec.describe Person, type: :model do
     it 'orders transfers by date descending' do
       transfer1 = create(:transfer, article: article, from_person: person1, to_person: person2, transfer_date: 1.day.ago)
       transfer2 = create(:transfer, article: article, from_person: person2, to_person: person1, transfer_date: 2.days.ago)
-      
+
       expect(person1.transfer_history.first).to eq(transfer1)
     end
   end

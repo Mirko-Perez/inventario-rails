@@ -83,14 +83,14 @@ RSpec.describe Transfer, type: :model do
     describe 'after_create' do
       it 'updates the article current_person after transfer creation' do
         expect(article.current_person).to eq(person1)
-        
+
         transfer = Transfer.create!(
           article: article,
           from_person: person1,
           to_person: person2,
           transfer_date: Date.current
         )
-        
+
         article.reload
         expect(article.current_person).to eq(person2)
       end
@@ -115,7 +115,7 @@ RSpec.describe Transfer, type: :model do
       expect(article.current_person).to eq(person1)
       expect(person1.current_articles).to include(article)
       expect(person2.current_articles).not_to include(article)
-      
+
       # Create transfer
       transfer = Transfer.create!(
         article: article,
@@ -124,12 +124,12 @@ RSpec.describe Transfer, type: :model do
         transfer_date: Date.current,
         notes: 'Test transfer'
       )
-      
+
       # Reload to get updated associations
       article.reload
       person1.reload
       person2.reload
-      
+
       # Final state
       expect(article.current_person).to eq(person2)
       expect(person1.current_articles).not_to include(article)
@@ -139,7 +139,7 @@ RSpec.describe Transfer, type: :model do
 
     it 'maintains transfer history' do
       person3 = create(:person, first_name: 'Carlos', last_name: 'Rodríguez')
-      
+
       # First transfer: person1 -> person2
       transfer1 = Transfer.create!(
         article: article,
@@ -147,9 +147,9 @@ RSpec.describe Transfer, type: :model do
         to_person: person2,
         transfer_date: 2.days.ago
       )
-      
+
       article.reload
-      
+
       # Second transfer: person2 -> person3
       transfer2 = Transfer.create!(
         article: article,
@@ -157,12 +157,12 @@ RSpec.describe Transfer, type: :model do
         to_person: person3,
         transfer_date: 1.day.ago
       )
-      
+
       # Check transfer history
       history = article.transfer_history
       expect(history).to include(transfer1, transfer2)
       expect(history.first).to eq(transfer2) # Most recent first
-      
+
       # Check final state
       article.reload
       expect(article.current_person).to eq(person3)

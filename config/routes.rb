@@ -1,13 +1,13 @@
 Rails.application.routes.draw do
   root "articles#index"
-  
+
   resources :articles do
-    resources :transfers, only: [:new, :create]
+    resources :transfers, only: [ :new, :create ]
   end
-  
+
   resources :people
-  resources :transfers, only: [:index, :show, :destroy]
-  
+  resources :transfers, only: [ :index, :show, :destroy ]
+
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check

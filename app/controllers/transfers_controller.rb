@@ -1,5 +1,5 @@
 class TransfersController < ApplicationController
-  before_action :set_transfer, only: [:show, :destroy]
+  before_action :set_transfer, only: [ :show, :destroy ]
 
   def index
     @transfers = Transfer.includes(:article, :from_person, :to_person)
@@ -15,7 +15,7 @@ class TransfersController < ApplicationController
     @transfer.article_id = params[:article_id] if params[:article_id]
     @articles = Article.includes(:current_person).order(:brand, :model)
     @people = Person.all.order(:first_name, :last_name)
-    
+
     if @transfer.article_id
       @article = Article.find(@transfer.article_id)
       @transfer.from_person_id = @article.current_person_id
@@ -24,9 +24,9 @@ class TransfersController < ApplicationController
 
   def create
     @transfer = Transfer.new(transfer_params)
-    
+
     if @transfer.save
-      redirect_to @transfer.article, notice: 'Transfer was successfully recorded.'
+      redirect_to @transfer.article, notice: "Transfer was successfully recorded."
     else
       @articles = Article.includes(:current_person).order(:brand, :model)
       @people = Person.all.order(:first_name, :last_name)
@@ -37,7 +37,7 @@ class TransfersController < ApplicationController
 
   def destroy
     @transfer.destroy
-    redirect_to transfers_url, notice: 'Transfer was successfully deleted.'
+    redirect_to transfers_url, notice: "Transfer was successfully deleted."
   end
 
   private

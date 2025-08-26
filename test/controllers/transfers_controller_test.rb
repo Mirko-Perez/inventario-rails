@@ -27,23 +27,23 @@ class TransfersControllerTest < ActionDispatch::IntegrationTest
     # Create a simple transfer between two different people
     # Use article fixture 'one' which has current_person 'one'
     # Transfer to person 'two'
-    
-    assert_difference('Transfer.count') do
-      post article_transfers_url(@article), params: { 
-        transfer: { 
+
+    assert_difference("Transfer.count") do
+      post article_transfers_url(@article), params: {
+        transfer: {
           article_id: @article.id,
-          from_person_id: @article.current_person_id, 
-          to_person_id: @person_to.id, 
+          from_person_id: @article.current_person_id,
+          to_person_id: @person_to.id,
           transfer_date: Date.current,
           notes: "Test transfer"
-        } 
+        }
       }
     end
     assert_redirected_to article_url(@article)
   end
 
   test "should destroy transfer" do
-    assert_difference('Transfer.count', -1) do
+    assert_difference("Transfer.count", -1) do
       delete transfer_url(@transfer)
     end
     assert_redirected_to transfers_url

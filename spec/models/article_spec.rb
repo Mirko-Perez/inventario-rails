@@ -109,7 +109,7 @@ RSpec.describe Article, type: :model do
     it 'returns transfers for the article ordered by date' do
       transfer1 = create(:transfer, article: article, from_person: person1, to_person: person2, transfer_date: 2.days.ago)
       transfer2 = create(:transfer, article: article, from_person: person2, to_person: person1, transfer_date: 1.day.ago)
-      
+
       expect(article.transfer_history.first).to eq(transfer2)
       expect(article.transfer_history.last).to eq(transfer1)
     end
@@ -124,7 +124,7 @@ RSpec.describe Article, type: :model do
     it 'returns unique previous carriers' do
       create(:transfer, article: article, from_person: person1, to_person: person2)
       create(:transfer, article: article, from_person: person2, to_person: person3)
-      
+
       expect(article.previous_carriers).to include(person1, person2)
       expect(article.previous_carriers).not_to include(person3)
     end

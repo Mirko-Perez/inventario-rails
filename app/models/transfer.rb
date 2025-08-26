@@ -1,7 +1,7 @@
 class Transfer < ApplicationRecord
   belongs_to :article
-  belongs_to :from_person, class_name: 'Person'
-  belongs_to :to_person, class_name: 'Person'
+  belongs_to :from_person, class_name: "Person"
+  belongs_to :to_person, class_name: "Person"
 
   validates :transfer_date, presence: true
   validates :from_person_id, presence: true
