@@ -1,2 +1,43 @@
-<h1>Articles#index</h1>
-<p>Find me in app/views/articles/index.html.erb</p>
+<div class="page-header">
+  <h1>Articles</h1>
+  <%= link_to "New Article", new_article_path, class: "btn btn-primary" %>
+</div>
+
+<div class="filters">
+  <%= form_with url: articles_path, method: :get, local: true, class: "filter-form" do |form| %>
+    <div class="filter-group">
+      <%= form.text_field :model, placeholder: "Search by model", value: params[:model], class: "form-control" %>
+      <%= form.select :brand, options_for_select([['All Brands', '']] + @brands.map { |b| [b, b] }, params[:brand]), {}, { class: "form-control" } %>
+      <%= form.date_field :entry_date, value: params[:entry_date], class: "form-control" %>
+      <%= form.submit "Filter", class: "btn btn-secondary" %>
+      <%= link_to "Clear", articles_path, class: "btn btn-outline" %>
+    </div>
+  <% end %>
+</div>
+
+<div class="articles-grid">
+  <% @articles.each do |article| %>
+    <div class="article-card">
+      <div class="article-header">
+        <h3><%= link_to "#{article.brand} #{article.model}", article_path(article) %></h3>
+        <span class="entry-date"><%= article.entry_date.strftime("%B %d, %Y") %></span>
+      </div>
+      <div class="article-body">
+        <p><strong>Current Carrier:</strong> <%= article.current_person.full_name %></p>
+        <p><strong>Entry Date:</strong> <%= article.entry_date.strftime("%B %d, %Y") %></p>
+      </div>
+      <div class="article-actions">
+        <%= link_to "View", article_path(article), class: "btn btn-sm btn-outline" %>
+        <%= link_to "Transfer", new_article_transfer_path(article), class: "btn btn-sm btn-secondary" %>
+        <%= link_to "Edit", edit_article_path(article), class: "btn btn-sm btn-outline" %>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<% if @articles.empty? %>
+  <div class="empty-state">
+    <h3>No articles found</h3>
+    <p>Start by <%= link_to "adding your first article", new_article_path %>.</p>
+  </div>
+<% end %>

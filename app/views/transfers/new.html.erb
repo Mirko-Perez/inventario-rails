@@ -1,2 +1,75 @@
-<h1>Transfers#new</h1>
-<p>Find me in app/views/transfers/new.html.erb</p>
+<div class="page-header">
+  <h1>New Transfer</h1>
+  <%= link_to "Back", :back, class: "btn btn-outline" %>
+</div>
+
+<div class="form-container">
+  <%= form_with model: [@article, @transfer], local: true, class: "transfer-form" do |form| %>
+    <% if @transfer.errors.any? %>
+      <div class="alert alert-danger">
+        <h4><%= pluralize(@transfer.errors.count, "error") %> prohibited this transfer from being saved:</h4>
+        <ul>
+          <% @transfer.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= form.label :article_id, "Article", class: "form-label" %>
+      <%= form.select :article_id, 
+                      options_from_collection_for_select(@articles, :id, ->(a) { "#{a.brand} #{a.model} (#{a.current_person.full_name})" }, @transfer.article_id),
+                      { prompt: "Select an article" },
+                      { class: "form-control", required: true, id: "transfer_article_id" } %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :from_person_id, "From Person", class: "form-label" %>
+      <%= form.select :from_person_id, 
+                      options_from_collection_for_select(@people, :id, :full_name, @transfer.from_person_id),
+                      { prompt: "Select from person" },
+                      { class: "form-control", required: true, readonly: @article.present? } %>
+      <% if @article %>
+        <small class="form-text">Current carrier of the selected article</small>
+      <% end %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :to_person_id, "To Person", class: "form-label" %>
+      <%= form.select :to_person_id, 
+                      options_from_collection_for_select(@people, :id, :full_name, @transfer.to_person_id),
+                      { prompt: "Select to person" },
+                      { class: "form-control", required: true } %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :transfer_date, class: "form-label" %>
+      <%= form.date_field :transfer_date, class: "form-control", required: true, value: Date.current %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :notes, class: "form-label" %>
+      <%= form.text_area :notes, class: "form-control", rows: 3, placeholder: "Optional notes about this transfer" %>
+    </div>
+
+    <div class="form-actions">
+      <%= form.submit "Record Transfer", class: "btn btn-primary" %>
+      <%= link_to "Cancel", :back, class: "btn btn-secondary" %>
+    </div>
+  <% end %>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const articleSelect = document.getElementById('transfer_article_id');
+    const fromPersonSelect = document.getElementById('transfer_from_person_id');
+    
+    if (articleSelect && fromPersonSelect) {
+      articleSelect.addEventListener('change', function() {
+        // This would require AJAX to update the from_person based on article selection
+        // For now, we'll keep it simple and let the server handle validation
+      });
+    }
+  });
+</script>

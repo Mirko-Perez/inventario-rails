@@ -1,0 +1,42 @@
+<div class="page-header">
+  <h1>Transfer History</h1>
+  <%= link_to "New Transfer", new_article_transfer_path(Article.first), class: "btn btn-primary" if Article.any? %>
+</div>
+
+<div class="transfers-list">
+  <% @transfers.each do |transfer| %>
+    <div class="transfer-card">
+      <div class="transfer-header">
+        <div class="transfer-date">
+          <%= transfer.transfer_date.strftime("%B %d, %Y") %>
+        </div>
+        <div class="transfer-article">
+          <%= link_to "#{transfer.article.brand} #{transfer.article.model}", article_path(transfer.article) %>
+        </div>
+      </div>
+      <div class="transfer-body">
+        <div class="transfer-flow">
+          <span class="from-person">
+            <%= link_to transfer.from_person.full_name, person_path(transfer.from_person) %>
+          </span>
+          <span class="arrow">→</span>
+          <span class="to-person">
+            <%= link_to transfer.to_person.full_name, person_path(transfer.to_person) %>
+          </span>
+        </div>
+        <% if transfer.notes.present? %>
+          <div class="transfer-notes">
+            <strong>Notes:</strong> <%= transfer.notes %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<% if @transfers.empty? %>
+  <div class="empty-state">
+    <h3>No transfers recorded</h3>
+    <p>Transfer history will appear here once articles are transferred between people.</p>
+  </div>
+<% end %>
