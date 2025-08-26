@@ -1,42 +1,48 @@
-<div class="page-header">
-  <h1>Transfer History</h1>
-  <%= link_to "New Transfer", new_article_transfer_path(Article.first), class: "btn btn-primary" if Article.any? %>
+<div class="flex justify-between items-center mb-8 pb-4 border-b-2 border-gray-200">
+  <h1 class="text-3xl font-bold text-gray-900">Transfer History</h1>
+  <% if Article.any? %>
+    <%= link_to "New Transfer", new_article_transfer_path(Article.first), class: "bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors" %>
+  <% end %>
 </div>
 
-<div class="transfers-list">
+<div class="space-y-4">
   <% @transfers.each do |transfer| %>
-    <div class="transfer-card">
-      <div class="transfer-header">
-        <div class="transfer-date">
+    <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6">
+      <div class="flex justify-between items-start mb-4">
+        <div class="text-sm text-gray-500">
           <%= transfer.transfer_date.strftime("%B %d, %Y") %>
         </div>
-        <div class="transfer-article">
+        <div class="text-lg font-medium text-blue-600 hover:text-blue-800">
           <%= link_to "#{transfer.article.brand} #{transfer.article.model}", article_path(transfer.article) %>
         </div>
       </div>
-      <div class="transfer-body">
-        <div class="transfer-flow">
-          <span class="from-person">
-            <%= link_to transfer.from_person.full_name, person_path(transfer.from_person) %>
-          </span>
-          <span class="arrow">→</span>
-          <span class="to-person">
-            <%= link_to transfer.to_person.full_name, person_path(transfer.to_person) %>
-          </span>
-        </div>
-        <% if transfer.notes.present? %>
-          <div class="transfer-notes">
-            <strong>Notes:</strong> <%= transfer.notes %>
-          </div>
-        <% end %>
+      <div class="flex items-center space-x-4 mb-4">
+        <span class="text-gray-700">
+          <%= link_to transfer.from_person.full_name, person_path(transfer.from_person), class: "font-medium text-blue-600 hover:text-blue-800" %>
+        </span>
+        <span class="text-blue-500 text-xl">→</span>
+        <span class="text-gray-700">
+          <%= link_to transfer.to_person.full_name, person_path(transfer.to_person), class: "font-medium text-blue-600 hover:text-blue-800" %>
+        </span>
       </div>
+      <% if transfer.notes.present? %>
+        <div class="bg-blue-50 border border-blue-200 p-3 rounded-lg">
+          <span class="text-sm font-medium text-gray-700">Notes:</span>
+          <span class="text-sm text-gray-600"><%= transfer.notes %></span>
+        </div>
+      <% end %>
     </div>
   <% end %>
 </div>
 
 <% if @transfers.empty? %>
-  <div class="empty-state">
-    <h3>No transfers recorded</h3>
-    <p>Transfer history will appear here once articles are transferred between people.</p>
+  <div class="text-center py-12">
+    <div class="text-gray-400 mb-4">
+      <svg class="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+      </svg>
+    </div>
+    <h3 class="text-lg font-medium text-gray-900 mb-2">No transfers recorded</h3>
+    <p class="text-gray-600">Transfer history will appear here once articles are transferred between people.</p>
   </div>
 <% end %>

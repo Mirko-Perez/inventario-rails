@@ -18,4 +18,8 @@ class Article < ApplicationRecord
   def previous_carriers
     transfers.includes(:from_person).map(&:from_person).uniq
   end
+
+  def display_name_with_carrier
+    "#{brand} #{model} (#{current_person.full_name})"
+  end
 end

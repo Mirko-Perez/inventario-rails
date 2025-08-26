@@ -1,14 +1,14 @@
-<div class="page-header">
-  <h1>New Transfer</h1>
-  <%= link_to "Back", :back, class: "btn btn-outline" %>
+<div class="flex justify-between items-center mb-8 pb-4 border-b-2 border-gray-200">
+  <h1 class="text-3xl font-bold text-gray-900">New Transfer</h1>
+  <%= link_to "Back to Transfers", transfers_path, class: "border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors" %>
 </div>
 
-<div class="form-container">
-  <%= form_with model: [@article, @transfer], local: true, class: "transfer-form" do |form| %>
+<div class="bg-white p-8 rounded-lg shadow-sm max-w-2xl">
+  <%= form_with model: [@article, @transfer], local: true, class: "space-y-6" do |form| %>
     <% if @transfer.errors.any? %>
-      <div class="alert alert-danger">
-        <h4><%= pluralize(@transfer.errors.count, "error") %> prohibited this transfer from being saved:</h4>
-        <ul>
+      <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+        <h4 class="font-medium mb-2"><%= pluralize(@transfer.errors.count, "error") %> prohibited this transfer from being saved:</h4>
+        <ul class="list-disc list-inside space-y-1">
           <% @transfer.errors.full_messages.each do |message| %>
             <li><%= message %></li>
           <% end %>
@@ -16,46 +16,59 @@
       </div>
     <% end %>
 
-    <div class="form-group">
-      <%= form.label :article_id, "Article", class: "form-label" %>
-      <%= form.select :article_id, 
-                      options_from_collection_for_select(@articles, :id, ->(a) { "#{a.brand} #{a.model} (#{a.current_person.full_name})" }, @transfer.article_id),
-                      { prompt: "Select an article" },
-                      { class: "form-control", required: true, id: "transfer_article_id" } %>
-    </div>
-
-    <div class="form-group">
-      <%= form.label :from_person_id, "From Person", class: "form-label" %>
-      <%= form.select :from_person_id, 
-                      options_from_collection_for_select(@people, :id, :full_name, @transfer.from_person_id),
-                      { prompt: "Select from person" },
-                      { class: "form-control", required: true, readonly: @article.present? } %>
+    <div>
+      <%= form.label :article_id, "Article", class: "block text-sm font-medium text-gray-700 mb-2" %>
       <% if @article %>
-        <small class="form-text">Current carrier of the selected article</small>
+        <div class="bg-blue-50 border border-blue-200 p-4 rounded-lg">
+          <div class="font-medium text-gray-900"><%= @article.brand %> <%= @article.model %></div>
+          <p class="text-sm text-gray-600">Currently with: <%= @article.current_person.full_name %></p>
+        </div>
+        <%= form.hidden_field :article_id, value: @article.id %>
+      <% else %>
+        <%= form.select :article_id, 
+                        options_from_collection_for_select(Article.includes(:current_person).all, :id, :display_name_with_carrier, @transfer.article_id),
+                        { prompt: "Select an article" },
+                        { class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent", required: true } %>
       <% end %>
     </div>
 
-    <div class="form-group">
-      <%= form.label :to_person_id, "To Person", class: "form-label" %>
+    <div>
+      <%= form.label :from_person_id, "From Person", class: "block text-sm font-medium text-gray-700 mb-2" %>
+      <% if @article %>
+        <div class="bg-gray-50 border border-gray-200 p-4 rounded-lg">
+          <div class="font-medium text-gray-900"><%= @article.current_person.full_name %></div>
+          <p class="text-sm text-gray-600">(Current carrier)</p>
+        </div>
+        <%= form.hidden_field :from_person_id, value: @article.current_person_id %>
+      <% else %>
+        <%= form.select :from_person_id, 
+                        options_from_collection_for_select(@people, :id, :full_name, @transfer.from_person_id),
+                        { prompt: "Select from person" },
+                        { class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent", required: true } %>
+      <% end %>
+    </div>
+
+    <div>
+      <%= form.label :to_person_id, "To Person", class: "block text-sm font-medium text-gray-700 mb-2" %>
       <%= form.select :to_person_id, 
                       options_from_collection_for_select(@people, :id, :full_name, @transfer.to_person_id),
                       { prompt: "Select to person" },
-                      { class: "form-control", required: true } %>
+                      { class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent", required: true } %>
     </div>
 
-    <div class="form-group">
-      <%= form.label :transfer_date, class: "form-label" %>
-      <%= form.date_field :transfer_date, class: "form-control", required: true, value: Date.current %>
+    <div>
+      <%= form.label :transfer_date, class: "block text-sm font-medium text-gray-700 mb-2" %>
+      <%= form.date_field :transfer_date, class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent", required: true, value: Date.current %>
     </div>
 
-    <div class="form-group">
-      <%= form.label :notes, class: "form-label" %>
-      <%= form.text_area :notes, class: "form-control", rows: 3, placeholder: "Optional notes about this transfer" %>
+    <div>
+      <%= form.label :notes, class: "block text-sm font-medium text-gray-700 mb-2" %>
+      <%= form.text_area :notes, class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent", rows: 3, placeholder: "Optional notes about this transfer" %>
     </div>
 
-    <div class="form-actions">
-      <%= form.submit "Record Transfer", class: "btn btn-primary" %>
-      <%= link_to "Cancel", :back, class: "btn btn-secondary" %>
+    <div class="flex space-x-4 pt-4">
+      <%= form.submit "Create Transfer", class: "bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition-colors" %>
+      <%= link_to "Cancel", transfers_path, class: "bg-gray-300 hover:bg-gray-400 text-gray-700 font-medium py-2 px-6 rounded-lg transition-colors" %>
     </div>
   <% end %>
 </div>

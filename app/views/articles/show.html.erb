@@ -1,62 +1,76 @@
-<div class="page-header">
-  <h1><%= @article.brand %> <%= @article.model %></h1>
-  <div class="header-actions">
-    <%= link_to "Transfer", new_article_transfer_path(@article), class: "btn btn-primary" %>
-    <%= link_to "Edit", edit_article_path(@article), class: "btn btn-secondary" %>
-    <%= link_to "Back to Articles", articles_path, class: "btn btn-outline" %>
+<div class="flex justify-between items-center mb-8 pb-4 border-b-2 border-gray-200">
+  <h1 class="text-3xl font-bold text-gray-900"><%= @article.brand %> <%= @article.model %></h1>
+  <div class="flex space-x-3">
+    <%= link_to "Transfer", new_article_transfer_path(@article), class: "bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors" %>
+    <%= link_to "Edit", edit_article_path(@article), class: "bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg transition-colors" %>
+    <%= link_to "Back to Articles", articles_path, class: "border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors" %>
   </div>
 </div>
 
-<div class="article-details">
-  <div class="detail-section">
-    <h2>Article Information</h2>
-    <div class="detail-grid">
-      <div class="detail-item">
-        <label>Brand:</label>
-        <span><%= @article.brand %></span>
+<div class="bg-white rounded-lg shadow-sm overflow-hidden">
+  <div class="p-6 border-b border-gray-200">
+    <h2 class="text-xl font-semibold text-gray-900 mb-6">Article Information</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label class="block text-sm font-medium text-gray-500 mb-1">Brand</label>
+        <span class="text-gray-900"><%= @article.brand %></span>
       </div>
-      <div class="detail-item">
-        <label>Model:</label>
-        <span><%= @article.model %></span>
+      <div>
+        <label class="block text-sm font-medium text-gray-500 mb-1">Model</label>
+        <span class="text-gray-900"><%= @article.model %></span>
       </div>
-      <div class="detail-item">
-        <label>Entry Date:</label>
-        <span><%= @article.entry_date.strftime("%B %d, %Y") %></span>
+      <div>
+        <label class="block text-sm font-medium text-gray-500 mb-1">Entry Date</label>
+        <span class="text-gray-900"><%= @article.entry_date.strftime("%B %d, %Y") %></span>
       </div>
-      <div class="detail-item">
-        <label>Current Carrier:</label>
-        <span><%= link_to @article.current_person.full_name, person_path(@article.current_person) %></span>
+      <div>
+        <label class="block text-sm font-medium text-gray-500 mb-1">Current Carrier</label>
+        <span class="text-blue-600 hover:text-blue-800">
+          <%= link_to @article.current_person.full_name, person_path(@article.current_person), class: "font-medium" %>
+        </span>
       </div>
     </div>
   </div>
 
-  <div class="detail-section">
-    <h2>Transfer History</h2>
+  <div class="p-6">
+    <h2 class="text-xl font-semibold text-gray-900 mb-6">Transfer History</h2>
     <% if @transfer_history.any? %>
-      <div class="transfer-list">
+      <div class="space-y-4">
         <% @transfer_history.each do |transfer| %>
-          <div class="transfer-item">
-            <div class="transfer-date">
-              <%= transfer.transfer_date.strftime("%B %d, %Y") %>
+          <div class="bg-gray-50 p-4 rounded-lg border-l-4 border-blue-500">
+            <div class="flex justify-between items-start mb-2">
+              <div class="font-medium text-gray-900">
+                <%= transfer.transfer_date.strftime("%B %d, %Y") %>
+              </div>
             </div>
-            <div class="transfer-details">
-              <strong>From:</strong> <%= transfer.from_person.full_name %> →
-              <strong>To:</strong> <%= transfer.to_person.full_name %>
+            <div class="text-gray-700">
+              <span class="font-medium">From:</span> <%= transfer.from_person.full_name %>
+              <span class="text-blue-500 mx-2">→</span>
+              <span class="font-medium">To:</span> <%= transfer.to_person.full_name %>
               <% if transfer.notes.present? %>
-                <div class="transfer-notes"><%= transfer.notes %></div>
+                <div class="mt-2 p-3 bg-blue-50 rounded text-sm italic text-gray-600">
+                  <%= transfer.notes %>
+                </div>
               <% end %>
             </div>
           </div>
         <% end %>
       </div>
     <% else %>
-      <p class="no-transfers">No transfers recorded for this article.</p>
+      <div class="text-center py-8">
+        <div class="text-gray-400 mb-2">
+          <svg class="mx-auto h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+          </svg>
+        </div>
+        <p class="text-gray-500">No transfers recorded for this article.</p>
+      </div>
     <% end %>
   </div>
 </div>
 
-<div class="danger-zone">
+<div class="mt-8 pt-6 border-t-2 border-red-200">
   <%= link_to "Delete Article", article_path(@article), method: :delete, 
-              class: "btn btn-danger", 
+              class: "bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors", 
               confirm: "Are you sure you want to delete this article? This action cannot be undone." %>
 </div>

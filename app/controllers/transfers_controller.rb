@@ -36,9 +36,8 @@ class TransfersController < ApplicationController
   end
 
   def destroy
-    article = @transfer.article
     @transfer.destroy
-    redirect_to article, notice: 'Transfer was successfully deleted.'
+    redirect_to transfers_url, notice: 'Transfer was successfully deleted.'
   end
 
   private
