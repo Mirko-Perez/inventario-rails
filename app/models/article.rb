@@ -8,7 +8,7 @@ class Article < ApplicationRecord
   validates :current_person_id, presence: true
 
   scope :by_brand, ->(brand) { where(brand: brand) if brand.present? }
-  scope :by_model, ->(model) { where('model ILIKE ?', "%#{model}%") if model.present? }
+  scope :by_model, ->(model) { where('model LIKE ?', "%#{model}%") if model.present? }
   scope :by_entry_date, ->(date) { where(entry_date: date) if date.present? }
 
   def transfer_history

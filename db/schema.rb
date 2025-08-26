@@ -41,8 +41,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_25_183629) do
     t.index ["to_person_id"], name: "index_transfers_on_to_person_id"
   end
 
-  add_foreign_key "articles", "current_people"
+  add_foreign_key "articles", "people", column: "current_person_id"
   add_foreign_key "transfers", "articles"
-  add_foreign_key "transfers", "from_people"
-  add_foreign_key "transfers", "to_people"
+  add_foreign_key "transfers", "people", column: "from_person_id"
+  add_foreign_key "transfers", "people", column: "to_person_id"
 end
