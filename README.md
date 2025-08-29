@@ -57,6 +57,75 @@ Construir una aplicación web que permita **gestionar artículos y personas** en
 
 ## 🏗️ Diseño de la Solución
 
+# Sistema de Gestión de Inventario
+
+Aplicación web desarrollada en **Ruby on Rails 8** para gestionar artículos y personas en un sistema de inventario, incluyendo las transferencias de portadores con **baja lógica** (soft delete).
+
+## 🎯 Objetivo
+
+Construir una aplicación web que permita **gestionar artículos y personas** en un sistema de inventario, incluyendo las transferencias de portadores con capacidad de eliminación segura.
+
+## 🛠️ Tecnologías
+
+- **Ruby on Rails 8.0.2**
+- **SQLite3** (base de datos)
+- **Hotwire** (Turbo + Stimulus) para interacción UI
+- **Tailwind CSS** para estilos
+
+## 📋 Reglas de Negocio
+
+### Artículos
+- Cada artículo tiene:
+  - Identificador único
+  - Modelo
+  - Marca
+  - Fecha de ingreso
+- Cada artículo tiene un **portador actual**, que es una persona.
+- Los artículos pueden ser **eliminados lógicamente** (soft delete) preservando el historial.
+
+### Personas
+- Cada persona tiene:
+  - Identificador único
+  - Nombre
+  - Apellido
+- Cada persona puede portar **cero o más artículos**.
+- Las personas pueden ser **eliminadas lógicamente** sin afectar el historial de transferencias.
+
+### Transferencias
+- Un artículo puede ser transferido de una persona a otra.
+- Se mantiene un **historial de portadores** por artículo.
+- Se mantiene un **historial de artículos portados** por persona.
+- Las transferencias pueden ser eliminadas completamente si es necesario.
+
+## ✅ Funcionalidades Implementadas
+
+### Funcionalidades Mínimas
+- ✅ **Listar artículos** (solo activos)
+- ✅ **Detalle de artículo**
+  - Datos básicos
+  - Portador actual
+  - Historial de portadores
+- ✅ **Listar personas** (solo activas)
+  - Datos básicos
+  - Artículos que porta actualmente
+  - Historial de artículos portados
+- ✅ **Agregar artículo**
+- ✅ **Agregar persona**
+- ✅ **Registrar transferencia de artículo**
+- ✅ **Eliminación lógica** de artículos y personas
+- ✅ **Seeds obligatorias** con:
+  - 3 personas
+  - 5 artículos
+  - 2 transferencias cargadas
+
+### Funcionalidades Avanzadas
+- ✅ **Baja lógica (Soft Delete)** - Eliminación segura sin pérdida de datos
+- ✅ **Filtros avanzados** - Búsqueda por marca, modelo, fecha
+- ✅ **Validaciones robustas** - Integridad de datos y reglas de negocio
+- ✅ **Historial completo** - Preservación de transferencias y relaciones
+
+## 🏗️ Diseño de la Solución
+
 ### Modelo de Datos
 
 ```
@@ -64,6 +133,7 @@ Person (Persona)
 ├── id (PK)
 ├── first_name (string, required)
 ├── last_name (string, required)
+├── deleted_at (datetime, nullable)
 ├── created_at, updated_at
 └── Relaciones:
     ├── has_many :current_articles
@@ -76,6 +146,7 @@ Article (Artículo)
 ├── model (string, required)
 ├── entry_date (date, required)
 ├── current_person_id (FK, required)
+├── deleted_at (datetime, nullable)
 ├── created_at, updated_at
 └── Relaciones:
     ├── belongs_to :current_person
@@ -164,7 +235,7 @@ rails tailwindcss:build
 
 5. **Ejecutar la aplicación**
 ```bash
-dev
+rails ser
 ```
 
 La aplicación estará disponible en `http://localhost:3000`
