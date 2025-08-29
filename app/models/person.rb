@@ -17,7 +17,7 @@ class Person < ApplicationRecord
   def transfer_history
     Transfer.where("from_person_id = ? OR to_person_id = ?", id, id)
            .includes(:article, :from_person, :to_person)
-           .order(transfer_date: :desc)
+           .order(transfer_date: :desc, created_at: :desc)
   end
 
   def soft_delete!

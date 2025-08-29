@@ -19,7 +19,7 @@ class Article < ApplicationRecord
   end
 
   def transfer_history
-    transfers.includes(:from_person, :to_person).order(transfer_date: :desc)
+    transfers.includes(:from_person, :to_person).order(transfer_date: :desc, created_at: :desc)
   end
 
   def previous_carriers

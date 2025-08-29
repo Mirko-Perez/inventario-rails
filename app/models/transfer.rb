@@ -12,7 +12,7 @@ class Transfer < ApplicationRecord
 
   after_create :update_article_current_person
 
-  scope :recent, -> { order(transfer_date: :desc) }
+  scope :recent, -> { order(transfer_date: :desc, created_at: :desc) }
 
   private
 
