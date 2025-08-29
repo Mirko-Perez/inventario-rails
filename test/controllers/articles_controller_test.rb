@@ -42,7 +42,6 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
     assert_no_difference("Article.count") do
       delete article_url(@article)
     end
-    
     @article.reload
     assert @article.deleted?
     assert_redirected_to articles_url

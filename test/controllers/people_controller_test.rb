@@ -44,7 +44,6 @@ class PeopleControllerTest < ActionDispatch::IntegrationTest
     assert_no_difference("Person.count") do
       delete person_url(person_without_articles)
     end
-    
     person_without_articles.reload
     assert person_without_articles.deleted?
     assert_redirected_to people_url
