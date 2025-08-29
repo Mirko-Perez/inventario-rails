@@ -12,7 +12,11 @@ class Article < ApplicationRecord
 
   scope :by_brand, ->(brand) { where(brand: brand) if brand.present? }
   scope :by_model, ->(model) { where("LOWER(model) LIKE ?", "%#{model.downcase}%") if model.present? }
-  scope :by_entry_date, ->(date) { where(entry_date: date) if date.present? }
+  scope :by_entry_date, ->(date) do
+    if date.present?
+      where("entry_date <= ?", Date.parse(date))
+    end
+  end
 
   def transfer_history
     transfers.includes(:from_person, :to_person).order(transfer_date: :desc)
