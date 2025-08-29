@@ -41,9 +41,12 @@ class PeopleControllerTest < ActionDispatch::IntegrationTest
     # Create a person without any articles
     person_without_articles = Person.create!(first_name: "Test", last_name: "Delete")
 
-    assert_difference("Person.count", -1) do
+    assert_no_difference("Person.count") do
       delete person_url(person_without_articles)
     end
+    
+    person_without_articles.reload
+    assert person_without_articles.deleted?
     assert_redirected_to people_url
   end
 end
