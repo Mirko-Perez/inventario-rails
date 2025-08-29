@@ -55,13 +55,6 @@ Construir una aplicación web que permita **gestionar artículos y personas** en
   - 5 artículos
   - 2 transferencias cargadas
 
-### Funcionalidades Opcionales
-- ✅ **Filtros de artículos** por marca, modelo y fecha de ingreso
-- ❌ ABM de marcas y modelos (no implementado)
-- ❌ Exportar/Importar CSV (no implementado)
-- ❌ Login básico (no implementado)
-- ❌ API JSON (no implementado)
-
 ## 🏗️ Diseño de la Solución
 
 ### Modelo de Datos
