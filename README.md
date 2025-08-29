@@ -1,64 +1,5 @@
 # Sistema de Gestión de Inventario
 
-Aplicación web desarrollada en **Ruby on Rails 8** para gestionar artículos y personas en un sistema de inventario, incluyendo las transferencias de portadores.
-
-## 🎯 Objetivo
-
-Construir una aplicación web que permita **gestionar artículos y personas** en un sistema de inventario, incluyendo las transferencias de portadores.
-
-## 🛠️ Tecnologías
-
-- **Ruby on Rails 8.0.2**
-- **SQLite3** (base de datos)
-- **Hotwire** (Turbo + Stimulus) para interacción UI
-- **Tailwind CSS** para estilos
-
-## 📋 Reglas de Negocio
-
-### Artículos
-- Cada artículo tiene:
-  - Identificador único
-  - Modelo
-  - Marca
-  - Fecha de ingreso
-- Cada artículo tiene un **portador actual**, que es una persona.
-
-### Personas
-- Cada persona tiene:
-  - Identificador único
-  - Nombre
-  - Apellido
-- Cada persona puede portar **cero o más artículos**.
-
-### Transferencias
-- Un artículo puede ser transferido de una persona a otra.
-- Se mantiene un **historial de portadores** por artículo.
-- Se mantiene un **historial de artículos portados** por persona.
-
-## ✅ Funcionalidades Implementadas
-
-### Funcionalidades Mínimas
-- ✅ **Listar artículos**
-- ✅ **Detalle de artículo**
-  - Datos básicos
-  - Portador actual
-  - Historial de portadores
-- ✅ **Listar personas**
-  - Datos básicos
-  - Artículos que porta actualmente
-  - Historial de artículos portados
-- ✅ **Agregar artículo**
-- ✅ **Agregar persona**
-- ✅ **Registrar transferencia de artículo**
-- ✅ **Seeds obligatorias** con:
-  - 3 personas
-  - 5 artículos
-  - 2 transferencias cargadas
-
-## 🏗️ Diseño de la Solución
-
-# Sistema de Gestión de Inventario
-
 Aplicación web desarrollada en **Ruby on Rails 8** para gestionar artículos y personas en un sistema de inventario, incluyendo las transferencias de portadores con **baja lógica** (soft delete).
 
 ## 🎯 Objetivo
@@ -127,6 +68,8 @@ Construir una aplicación web que permita **gestionar artículos y personas** en
 ## 🏗️ Diseño de la Solución
 
 ### Modelo de Datos
+
+![Modelo de Datos del Proyecto](/app/assets/images/diagrama.png)
 
 ```
 Person (Persona)
