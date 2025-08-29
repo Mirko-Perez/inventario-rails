@@ -103,8 +103,11 @@ RSpec.describe Transfer, type: :model do
 
     describe '.recent' do
       it 'orders transfers by date descending' do
-        expect(Transfer.recent.first).to eq(new_transfer)
-        expect(Transfer.recent.last).to eq(old_transfer)
+        # Scope the query to only the transfers we created for this test
+        test_transfers = Transfer.where(id: [old_transfer.id, new_transfer.id]).recent
+        
+        expect(test_transfers.first).to eq(new_transfer)
+        expect(test_transfers.last).to eq(old_transfer)
       end
     end
   end

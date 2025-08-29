@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_25_183629) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_29_055000) do
   create_table "articles", force: :cascade do |t|
     t.string "model"
     t.string "brand"
@@ -18,7 +18,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_25_183629) do
     t.integer "current_person_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
     t.index ["current_person_id"], name: "index_articles_on_current_person_id"
+    t.index ["deleted_at"], name: "index_articles_on_deleted_at"
   end
 
   create_table "people", force: :cascade do |t|
@@ -26,6 +28,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_25_183629) do
     t.string "last_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_people_on_deleted_at"
   end
 
   create_table "transfers", force: :cascade do |t|

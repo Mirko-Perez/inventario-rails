@@ -6,6 +6,10 @@ class Person < ApplicationRecord
   validates :first_name, presence: true, length: { minimum: 2, maximum: 50 }
   validates :last_name, presence: true, length: { minimum: 2, maximum: 50 }
 
+  # Baja lógica
+  scope :active, -> { where(deleted_at: nil) }
+  scope :deleted, -> { where.not(deleted_at: nil) }
+
   def full_name
     "#{first_name} #{last_name}"
   end
@@ -14,5 +18,17 @@ class Person < ApplicationRecord
     Transfer.where("from_person_id = ? OR to_person_id = ?", id, id)
            .includes(:article, :from_person, :to_person)
            .order(transfer_date: :desc)
+  end
+
+  def soft_delete!
+    update!(deleted_at: Time.current)
+  end
+
+  def restore!
+    update!(deleted_at: nil)
+  end
+
+  def deleted?
+    deleted_at.present?
   end
 end

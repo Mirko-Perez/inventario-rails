@@ -2,12 +2,12 @@ class ArticlesController < ApplicationController
   before_action :set_article, only: [ :show, :edit, :update, :destroy ]
 
   def index
-    @articles = Article.includes(:current_person)
+    @articles = Article.active.includes(:current_person)
     @articles = @articles.by_brand(params[:brand]) if params[:brand].present?
     @articles = @articles.by_model(params[:model]) if params[:model].present?
     @articles = @articles.by_entry_date(params[:entry_date]) if params[:entry_date].present?
     @articles = @articles.order(:brand, :model)
-    @brands = Article.distinct.pluck(:brand).compact.sort
+    @brands = Article.active.distinct.pluck(:brand).compact.sort
   end
 
   def show
@@ -43,7 +43,7 @@ class ArticlesController < ApplicationController
   end
 
   def destroy
-    @article.destroy
+    @article.soft_delete!
     redirect_to articles_url, notice: "Article was successfully deleted."
   end
 

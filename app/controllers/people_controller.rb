@@ -2,7 +2,7 @@ class PeopleController < ApplicationController
   before_action :set_person, only: [ :show, :edit, :update, :destroy ]
 
   def index
-    @people = Person.includes(:current_articles).order(:first_name, :last_name)
+    @people = Person.active.includes(:current_articles).order(:first_name, :last_name)
   end
 
   def show
@@ -35,12 +35,8 @@ class PeopleController < ApplicationController
   end
 
   def destroy
-    if @person.current_articles.any?
-      redirect_to @person, alert: "Cannot delete person who currently carries articles."
-    else
-      @person.destroy
-      redirect_to people_url, notice: "Person was successfully deleted."
-    end
+    @person.soft_delete!
+    redirect_to people_url, notice: "Person was successfully deleted."
   end
 
   private
