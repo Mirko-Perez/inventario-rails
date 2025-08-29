@@ -235,7 +235,7 @@ rails tailwindcss:build
 
 5. **Ejecutar la aplicación**
 ```bash
-rails ser
+rails server
 ```
 
 La aplicación estará disponible en `http://localhost:3000`
