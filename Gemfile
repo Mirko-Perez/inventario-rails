@@ -63,6 +63,7 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   gem "factory_bot_rails"
+  gem "simplecov", require: false
 end
 
 gem "rspec-rails", "~> 8.0", groups: [ :development, :test ]

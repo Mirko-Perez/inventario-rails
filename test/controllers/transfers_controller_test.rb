@@ -42,10 +42,22 @@ class TransfersControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to article_url(@article)
   end
 
-  test "should destroy transfer" do
-    assert_difference("Transfer.count", -1) do
-      delete transfer_url(@transfer)
+  test "should destroy transfer (soft delete)" do
+    transfer = transfers(:one)
+
+    # Soft delete NO cambia la cantidad de filas
+    assert_no_difference("Transfer.count") do
+      delete transfer_path(transfer)
     end
     assert_redirected_to transfers_url
+
+    # El registro sigue existiendo pero con deleted_at (soft-deleted)
+    deleted = Transfer.with_deleted.find(transfer.id)
+    assert deleted.deleted?, "Expected transfer to be soft-deleted (deleted_at present)"
+
+    # La index lista solo activas, por lo que no debe aparecer
+    get transfers_path
+    assert_response :success
+    refute_match transfer.id.to_s, @response.body
   end
 end

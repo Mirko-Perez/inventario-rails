@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_29_055000) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_17_181743) do
   create_table "articles", force: :cascade do |t|
     t.string "model"
     t.string "brand"
@@ -40,7 +40,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_29_055000) do
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
     t.index ["article_id"], name: "index_transfers_on_article_id"
+    t.index ["deleted_at"], name: "index_transfers_on_deleted_at"
     t.index ["from_person_id"], name: "index_transfers_on_from_person_id"
     t.index ["to_person_id"], name: "index_transfers_on_to_person_id"
   end
