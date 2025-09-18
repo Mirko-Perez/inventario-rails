@@ -1,10 +1,21 @@
 <div class="flex justify-between items-center mb-8 pb-4 border-b-2 border-gray-200">
-  <h1 class="text-3xl font-bold text-gray-900"><%= @person.full_name %></h1>
+  <h1 class="text-3xl font-bold text-gray-900">
+    <%= @person.full_name %>
+    <% if @person.deleted? %>
+      <span class="align-middle ml-3 inline-flex items-center px-2 py-1 rounded text-xs font-semibold bg-red-100 text-red-700 border border-red-200">Eliminado</span>
+    <% end %>
+  </h1>
   <div class="flex space-x-3">
     <%= link_to "Edit", edit_person_path(@person), class: "bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg transition-colors" %>
     <%= link_to "Back to People", people_path, class: "border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors" %>
   </div>
 </div>
+
+<% if @person.deleted? %>
+  <div class="mb-6 p-4 rounded border border-red-200 bg-red-50 text-red-800">
+    Esta persona fue eliminada (baja lógica). El registro y su historial se conservan.
+  </div>
+<% end %>
 
 <div class="space-y-8">
   <div class="bg-white rounded-lg shadow-sm overflow-hidden">
@@ -36,6 +47,9 @@
               <div>
                 <h4 class="font-medium text-gray-900">
                   <%= link_to "#{article.brand} #{article.model}", article_path(article), class: "text-blue-600 hover:text-blue-800" %>
+                  <% if article.deleted? %>
+                    <span class="align-middle ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-red-100 text-red-700 border border-red-200">Eliminado</span>
+                  <% end %>
                 </h4>
                 <p class="text-sm text-gray-600">Entry Date: <%= article.entry_date.strftime("%B %d, %Y") %></p>
               </div>
@@ -69,17 +83,31 @@
               <div class="flex justify-between items-start mb-2">
                 <div class="font-medium text-gray-900">
                   <%= transfer.transfer_date.strftime("%B %d, %Y") %>
+                  <% if transfer.deleted? %>
+                    <span class="ml-2 align-middle inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-red-100 text-red-700 border border-red-200">Transfer eliminada</span>
+                  <% end %>
                 </div>
               </div>
               <div class="text-gray-700">
                 <p class="mb-2">
                   <span class="font-medium">Article:</span> 
                   <%= link_to "#{transfer.article.brand} #{transfer.article.model}", article_path(transfer.article), class: "text-blue-600 hover:text-blue-800" %>
+                  <% if transfer.article.deleted? %>
+                    <span class="align-middle ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-red-100 text-red-700 border border-red-200">Eliminado</span>
+                  <% end %>
                 </p>
                 <% if transfer.from_person_id == @person.id %>
-                  <p><span class="font-medium">Transferred to:</span> <%= transfer.to_person.full_name %></p>
+                  <p><span class="font-medium">Transferred to:</span> <%= transfer.to_person.full_name %>
+                    <% if transfer.to_person.deleted? %>
+                      <span class="align-middle ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-red-100 text-red-700 border border-red-200">Eliminado</span>
+                    <% end %>
+                  </p>
                 <% else %>
-                  <p><span class="font-medium">Received from:</span> <%= transfer.from_person.full_name %></p>
+                  <p><span class="font-medium">Received from:</span> <%= transfer.from_person.full_name %>
+                    <% if transfer.from_person.deleted? %>
+                      <span class="align-middle ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-red-100 text-red-700 border border-red-200">Eliminado</span>
+                    <% end %>
+                  </p>
                 <% end %>
                 <% if transfer.notes.present? %>
                   <div class="mt-2 p-3 bg-blue-50 rounded text-sm italic text-gray-600">
@@ -104,8 +132,18 @@
   </div>
 </div>
 
-<div class="mt-8 pt-6 border-t-2 border-red-200">
-  <%= link_to "Delete Person", person_path(@person), method: :delete,
-      data: { turbo_confirm: "Are you sure you want to delete this person? This will hide them from the system but preserve all transfer history." },
-      class: "bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors" %>
+<div class="mt-8 pt-6 border-t-2 border-red-200 flex flex-wrap gap-2">
+  <% if @person.deleted? %>
+    <%= button_to "Restore Person",
+          restore_person_path(@person),
+          method: :post,
+          form: { class: "inline" },
+          class: "bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition-colors" %>
+  <% else %>
+    <%= button_to "Delete Person",
+          person_path(@person),
+          method: :delete,
+          form: { class: "inline", data: { turbo_confirm: "Are you sure you want to delete this person? This will hide them from the system but preserve all transfer history." } },
+          class: "bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors" %>
+  <% end %>
 </div>

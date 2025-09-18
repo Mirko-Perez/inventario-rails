@@ -1,5 +1,5 @@
 class ArticlesController < ApplicationController
-  before_action :set_article, only: [ :show, :edit, :update, :destroy ]
+  before_action :set_article, only: [ :show, :edit, :update, :destroy, :restore ]
 
   def index
     @articles = Article.active.includes(:current_person)
@@ -45,6 +45,11 @@ class ArticlesController < ApplicationController
   def destroy
     @article.soft_delete!
     redirect_to articles_url, notice: "Article was successfully deleted."
+  end
+
+  def restore
+    @article.restore!
+    redirect_to @article, notice: "Article was successfully restored."
   end
 
   private

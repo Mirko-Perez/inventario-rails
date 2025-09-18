@@ -1,10 +1,11 @@
 class TransfersController < ApplicationController
-  before_action :set_transfer, only: [ :show, :destroy ]
+  before_action :set_transfer, only: [ :show, :destroy, :restore ]
 
   def index
-    @transfers = Transfer.includes(:article, :from_person, :to_person)
-                        .recent
-                        .limit(50)
+    @transfers = Transfer.active
+                         .includes(:article, :from_person, :to_person)
+                         .recent
+                         .limit(50)
   end
 
   def show
@@ -36,8 +37,13 @@ class TransfersController < ApplicationController
   end
 
   def destroy
-    @transfer.destroy
-    redirect_to transfers_url, notice: "Transfer was successfully deleted."
+    @transfer.soft_delete!
+    redirect_to transfers_url, notice: "Transfer was soft-deleted successfully."
+  end
+
+  def restore
+    @transfer.restore!
+    redirect_to transfer_path(@transfer), notice: "Transfer was restored successfully."
   end
 
   private

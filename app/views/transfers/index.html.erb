@@ -14,15 +14,24 @@
         </div>
         <div class="text-lg font-medium text-blue-600 hover:text-blue-800">
           <%= link_to "#{transfer.article.brand} #{transfer.article.model}", article_path(transfer.article) %>
+          <% if transfer.article.deleted? %>
+            <span class="align-middle ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-red-100 text-red-700 border border-red-200">Eliminado</span>
+          <% end %>
         </div>
       </div>
       <div class="flex items-center space-x-4 mb-4">
         <span class="text-gray-700">
           <%= link_to transfer.from_person.full_name, person_path(transfer.from_person), class: "font-medium text-blue-600 hover:text-blue-800" %>
+          <% if transfer.from_person.deleted? %>
+            <span class="align-middle ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-red-100 text-red-700 border border-red-200">Eliminado</span>
+          <% end %>
         </span>
         <span class="text-blue-500 text-xl">→</span>
         <span class="text-gray-700">
           <%= link_to transfer.to_person.full_name, person_path(transfer.to_person), class: "font-medium text-blue-600 hover:text-blue-800" %>
+          <% if transfer.to_person.deleted? %>
+            <span class="align-middle ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-red-100 text-red-700 border border-red-200">Eliminado</span>
+          <% end %>
         </span>
       </div>
       <% if transfer.notes.present? %>
@@ -31,6 +40,15 @@
           <span class="text-sm text-gray-600"><%= transfer.notes %></span>
         </div>
       <% end %>
+      
+    <div class="mt-4 flex justify-end gap-3">
+      <%= link_to "View", transfer_path(transfer), class: "inline-flex items-center px-3 py-2 rounded-md text-sm font-medium text-blue-600 hover:text-blue-800" %>
+      <%= button_to "Delete",
+            transfer_path(transfer),
+            method: :delete,
+            form: { class: "inline", data: { turbo_confirm: "Are you sure you want to delete this transfer?" } },
+            class: "inline-flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium bg-red-600 text-white hover:bg-red-700 transition" %>
+    </div>
     </div>
   <% end %>
 </div>

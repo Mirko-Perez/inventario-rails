@@ -1,5 +1,5 @@
 class PeopleController < ApplicationController
-  before_action :set_person, only: [ :show, :edit, :update, :destroy ]
+  before_action :set_person, only: [ :show, :edit, :update, :destroy, :restore ]
 
   def index
     @people = Person.active.includes(:current_articles).order(:first_name, :last_name)
@@ -8,6 +8,8 @@ class PeopleController < ApplicationController
   def show
     @current_articles = @person.current_articles.includes(:transfers)
     @transfer_history = @person.transfer_history
+    # Si la persona está eliminada, no mostrar artículos actuales (aunque existan por estados previos)
+    @current_articles = [] if @person.deleted?
   end
 
   def new
@@ -37,6 +39,11 @@ class PeopleController < ApplicationController
   def destroy
     @person.soft_delete!
     redirect_to people_url, notice: "Person was successfully deleted."
+  end
+
+  def restore
+    @person.restore!
+    redirect_to @person, notice: "Person was successfully restored."
   end
 
   private

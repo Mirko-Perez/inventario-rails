@@ -2,11 +2,22 @@ Rails.application.routes.draw do
   root "articles#index"
 
   resources :articles do
+    member do
+      post :restore
+    end
     resources :transfers, only: [ :new, :create ]
   end
 
-  resources :people
-  resources :transfers, only: [ :index, :show, :destroy ]
+  resources :people do
+    member do
+      post :restore
+    end
+  end
+  resources :transfers, only: [ :index, :show, :destroy ] do
+    member do
+      post :restore
+    end
+  end
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
