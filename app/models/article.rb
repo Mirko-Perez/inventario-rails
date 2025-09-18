@@ -1,6 +1,6 @@
 class Article < ApplicationRecord
   include SoftDeletable
-  belongs_to :current_person, class_name: "Person", optional: true
+  belongs_to :current_person, class_name: "Person", optional: false
   has_many :transfers, dependent: :destroy
 
   validates :model, presence: true, length: { minimum: 2, maximum: 100 }
@@ -11,7 +11,8 @@ class Article < ApplicationRecord
   scope :by_model, ->(model) { where("LOWER(model) LIKE ?", "%#{model.downcase}%") if model.present? }
   scope :by_entry_date, ->(date) do
     if date.present?
-      where("entry_date <= ?", Date.parse(date))
+      parsed = date.is_a?(Date) ? date : Date.parse(date.to_s)
+      where("entry_date <= ?", parsed)
     end
   end
 

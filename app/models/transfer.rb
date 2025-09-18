@@ -8,8 +8,8 @@ class Transfer < ApplicationRecord
   validates :from_person_id, presence: true
   validates :to_person_id, presence: true
   validates :article_id, presence: true
-  validate :different_persons
-  validate :from_person_must_be_current_carrier
+  validate :different_persons, on: :create
+  validate :from_person_must_be_current_carrier, on: :create
 
   after_create :update_article_current_person
   after_update :recalculate_current_person_if_deleted, if: :saved_change_to_deleted_at?
